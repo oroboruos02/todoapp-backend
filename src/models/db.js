@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize('mysql://root:12345@localhost:3306/todolist');
+const sequelize = new Sequelize('mysql://uchtfluwggqz7tle:5EP9r2kFK6Xvo6sPniNK@bdzixi4ueopv9njsnyzp-mysql.services.clever-cloud.com:3306/bdzixi4ueopv9njsnyzp');
 
 const Usuario = sequelize.define('users', {
   id: {

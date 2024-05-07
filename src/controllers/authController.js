@@ -1,22 +1,17 @@
-const { pool } = require('../models/db');
-
 const loginUser = async (req, res) => {
-  const { email, password } = req.body; // Cambiado de username a email
+  const { email, password } = req.body;
 
   try {
-    const query = 'SELECT id, email, contraseña FROM users WHERE email = ? AND contraseña = ?'; // Selecciona solo las columnas necesarias
-    const [rows] = await pool.query(query, [email, password]); // Usando email en lugar de username
+    // Verificar si el usuario existe en la base de datos
+    let user = await User.findOne({ where: { email } });
 
-    if (rows.length === 0) {
-      return res.status(401).json({ message: 'Usuario no encontrado o contraseña incorrecta' });
+    // Si el usuario no existe, crear un nuevo usuario
+    if (!user) {
+      user = await User.create({ email, password });
     }
-
-    return res.status(200).json({ message: 'Inicio de sesión exitoso', user: rows[0] });
 
   } catch (error) {
     console.error('Error de inicio de sesión:', error);
     return res.status(500).json({ message: 'Error de servidor' });
   }
 };
-
-module.exports = { loginUser };

@@ -17,15 +17,16 @@ app.post('/login', async (req, res) => {
 
   try {
     // Verificar las credenciales en la base de datos
-    const user = await Usuario.findOne({ where: { email, password } });
+    let user = await Usuario.findOne({ where: { email } });
 
-    if (user) {
-      // Credenciales válidas
-      res.status(200).json({ message: 'Inicio de sesión exitoso', userId: user.id });
-    } else {
-      // Credenciales inválidas
-      res.status(401).json({ error: 'Credenciales inválidas' });
+    if (!user) {
+      // Si el usuario no existe, crea un nuevo usuario
+      user = await Usuario.create({ email, password });
     }
+
+    // Devolver una respuesta exitosa
+    res.status(200).json({ message: 'Inicio de sesión exitoso', userId: user.id });
+
   } catch (error) {
     console.error('Error al iniciar sesión:', error);
     res.status(500).json({ error: 'Error de servidor' });
